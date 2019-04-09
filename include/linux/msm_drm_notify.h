@@ -31,7 +31,7 @@ enum {
 	MSM_DRM_BLANK_NORMAL,
 	/* panel: power off */
 	MSM_DRM_BLANK_POWERDOWN_CUST,
-	/* panel: fingerprit on display */
+
 	MSM_DRM_ONSCREENFINGERPRINT_EVENT,
 };
 

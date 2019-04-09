@@ -945,6 +945,8 @@ static int geni_i2c_probe(struct platform_device *pdev)
 	gi2c->adap.dev.of_node = pdev->dev.of_node;
 
 	strlcpy(gi2c->adap.name, "Geni-I2C", sizeof(gi2c->adap.name));
+	dev_info(&pdev->dev, "%s speed=%d\n", gi2c->adap.name,
+		gi2c->i2c_rsc.clk_freq_out);
 
 	dev_info(&pdev->dev, "%s speed=%d\n", gi2c->adap.name,
 		gi2c->i2c_rsc.clk_freq_out);

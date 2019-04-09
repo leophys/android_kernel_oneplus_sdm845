@@ -72,6 +72,7 @@
 
 #include "silead_fp.h"
 #include <linux/msm_drm_notify.h>
+#include <linux/oneplus/boot_mode.h>
 #include "../fingerprint_detect/fingerprint_detect.h"
 #include "../../../gpu/drm/msm/sde/sde_trace.h"
 

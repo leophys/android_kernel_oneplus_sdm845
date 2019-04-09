@@ -39,7 +39,7 @@
 #include <linux/input.h>
 #include <linux/firmware.h>
 #include <linux/platform_device.h>
-#include <linux/input/synaptics_dsx_s3320.h>
+#include <linux/input/synaptics_dsx.h>
 #include "synaptics_dsx_core.h"
 
 #define FW_IHEX_NAME  "tp/fw_synaptics_17819.img"
@@ -2055,9 +2055,7 @@ static int fwu_write_f34_v7_blocks(unsigned char *block_ptr,
 			block_ptr += write_size;
 			left_bytes -= write_size;
 		} while (left_bytes);
-
 		retval = fwu_wait_for_idle(WRITE_WAIT_MS, true);
-
 		if (retval < 0) {
 			TPD_ERR("%s: Failed to wait idle (remaining %d)\n",
 					__func__, remaining);

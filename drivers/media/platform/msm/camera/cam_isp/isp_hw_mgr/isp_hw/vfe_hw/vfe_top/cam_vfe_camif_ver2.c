@@ -143,9 +143,6 @@ int cam_vfe_camif_ver2_acquire_resource(
 	camif_data->first_line  = acquire_data->vfe_in.in_port->line_start;
 	camif_data->last_line   = acquire_data->vfe_in.in_port->line_stop;
 
-	CAM_DBG(CAM_ISP, "hw id:%d pix_pattern:%d dsp_mode=%d",
-		camif_res->hw_intf->hw_idx,
-		camif_data->pix_pattern, camif_data->dsp_mode);
 	return rc;
 }
 
@@ -209,11 +206,6 @@ static int cam_vfe_camif_resource_start(
 {
 	struct cam_vfe_mux_camif_data       *rsrc_data;
 	uint32_t                             val = 0;
-	uint32_t                             epoch0_irq_mask;
-	uint32_t                             epoch1_irq_mask;
-	uint32_t                             computed_epoch_line_cfg;
-	uint32_t                             camera_hw_version = 0;
-	int                                  rc = 0;
 
 	if (!camif_res) {
 		CAM_ERR(CAM_ISP, "Error! Invalid input arguments");
@@ -253,58 +245,15 @@ static int cam_vfe_camif_resource_start(
 		rsrc_data->common_reg->module_ctrl[
 		CAM_VFE_TOP_VER2_MODULE_STATS]->cgc_ovd);
 
-	/* get the HW version */
-	rc = cam_cpas_get_cpas_hw_version(&camera_hw_version);
-
-	if (rc) {
-		CAM_ERR(CAM_ISP, "Couldn't find HW version. rc: %d", rc);
-		return rc;
-	}
-
-	/* epoch config */
-	switch (camera_hw_version) {
-	case CAM_CPAS_TITAN_175_V101:
-	case CAM_CPAS_TITAN_175_V100:
-		epoch0_irq_mask = ((rsrc_data->last_line -
-				rsrc_data->first_line) / 2) +
-				rsrc_data->first_line;
-		epoch1_irq_mask = rsrc_data->reg_data->epoch_line_cfg &
-				0xFFFF;
-		computed_epoch_line_cfg = (epoch0_irq_mask << 16) |
-				epoch1_irq_mask;
-		cam_io_w_mb(computed_epoch_line_cfg,
-				rsrc_data->mem_base +
-				rsrc_data->camif_reg->epoch_irq);
-		CAM_DBG(CAM_ISP, "first_line: %u\n"
-				"last_line: %u\n"
-				"epoch_line_cfg: 0x%x",
-				rsrc_data->first_line,
-				rsrc_data->last_line,
-				computed_epoch_line_cfg);
-		break;
-	case CAM_CPAS_TITAN_170_V100:
-	case CAM_CPAS_TITAN_170_V110:
-	case CAM_CPAS_TITAN_170_V120:
-		cam_io_w_mb(rsrc_data->reg_data->epoch_line_cfg,
-				rsrc_data->mem_base +
-				rsrc_data->camif_reg->epoch_irq);
-		break;
-	default:
-		cam_io_w_mb(rsrc_data->reg_data->epoch_line_cfg,
-				rsrc_data->mem_base +
-				rsrc_data->camif_reg->epoch_irq);
-		CAM_WARN(CAM_ISP, "Hardware version not proper: 0x%x",
-				camera_hw_version);
-		break;
-	}
+	/* epoch config with 20 line */
+	cam_io_w_mb(rsrc_data->reg_data->epoch_line_cfg,
+		rsrc_data->mem_base + rsrc_data->camif_reg->epoch_irq);
 
 	camif_res->res_state = CAM_ISP_RESOURCE_STATE_STREAMING;
 
 	/* Reg Update */
 	cam_io_w_mb(rsrc_data->reg_data->reg_update_cmd_data,
 		rsrc_data->mem_base + rsrc_data->camif_reg->reg_update_cmd);
-	CAM_DBG(CAM_ISP, "hw id:%d RUP val:%d", camif_res->hw_intf->hw_idx,
-		rsrc_data->reg_data->reg_update_cmd_data);
 
 	/* disable sof irq debug flag */
 	rsrc_data->enable_sof_irq_debug = false;

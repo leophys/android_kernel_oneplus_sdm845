@@ -135,8 +135,9 @@ int xhci_halt(struct xhci_hcd *xhci)
 	if (!ret)
 		xhci->xhc_state |= XHCI_STATE_HALTED;
 	else
-		xhci_warn(xhci, "Host not halted after %u microseconds.\n",
-				XHCI_MAX_HALT_USEC);
+		xhci_warn(xhci,
+			"Host not halted after %u ms. ret=%d\n",
+			XHCI_MAX_HALT_USEC, ret);
 
 	xhci->cmd_ring_state = CMD_RING_STATE_STOPPED;
 

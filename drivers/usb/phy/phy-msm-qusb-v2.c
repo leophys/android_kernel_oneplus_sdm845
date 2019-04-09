@@ -84,12 +84,6 @@
 /* PERIPH_SS_PHY_REFGEN_NORTH_BG_CTRL register bits */
 #define BANDGAP_BYPASS			BIT(0)
 
-/* DEBUG_CTRL2 register value to program VSTATUS MUX for PHY status */
-#define DEBUG_CTRL2_MUX_PLL_LOCK_STATUS	0x4
-
-/* STAT5 register bits */
-#define VSTATUS_PLL_LOCK_STATUS_MASK	BIT(0)
-
 unsigned int phy_tune1;
 module_param(phy_tune1, uint, S_IRUGO | S_IWUSR);
 MODULE_PARM_DESC(phy_tune1, "QUSB PHY v2 TUNE1");

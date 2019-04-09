@@ -59,7 +59,7 @@
 #include <linux/types.h>
 #include <linux/of_gpio.h>
 #include <linux/platform_device.h>
-#include <linux/input/synaptics_dsx_s3320.h>
+#include <linux/input/synaptics_dsx.h>
 
 #if (KERNEL_VERSION(2, 6, 38) < LINUX_VERSION_CODE)
 #define KERNEL_ABOVE_2_6_38
@@ -136,6 +136,8 @@
 #define MASK_3BIT 0x07
 #define MASK_2BIT 0x03
 #define MASK_1BIT 0x01
+
+extern void msm_cpuidle_set_sleep_disable(bool disable);
 
 enum exp_fn {
 	RMI_DEV = 0,

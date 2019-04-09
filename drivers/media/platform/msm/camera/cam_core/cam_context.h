@@ -65,17 +65,16 @@ struct cam_ctx_request {
 	uint32_t                       status;
 	uint64_t                       request_id;
 	void                          *req_priv;
-	struct cam_hw_update_entry     hw_update_entries[CAM_CTX_CFG_MAX];
-	uint32_t                       num_hw_update_entries;
-	struct cam_hw_fence_map_entry  in_map_entries[CAM_CTX_CFG_MAX];
-	uint32_t                       num_in_map_entries;
-	struct cam_hw_fence_map_entry  out_map_entries[CAM_CTX_CFG_MAX];
-	uint32_t                       num_out_map_entries;
-	atomic_t                       num_in_acked;
-	uint32_t                       num_out_acked;
-	int                            flushed;
-	struct cam_context            *ctx;
-	struct cam_hw_mgr_dump_pf_data pf_data;
+	struct cam_hw_update_entry    hw_update_entries[CAM_CTX_CFG_MAX];
+	uint32_t                      num_hw_update_entries;
+	struct cam_hw_fence_map_entry in_map_entries[CAM_CTX_CFG_MAX];
+	uint32_t                      num_in_map_entries;
+	struct cam_hw_fence_map_entry out_map_entries[CAM_CTX_CFG_MAX];
+	uint32_t                      num_out_map_entries;
+	uint32_t                      num_in_acked;
+	uint32_t                      num_out_acked;
+	int                           flushed;
+	struct cam_context           *ctx;
 };
 
 /**

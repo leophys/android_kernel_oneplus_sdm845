@@ -58,6 +58,9 @@ struct qpnp_pon {
 	struct pon_regulator	*pon_reg_cfg;
 	struct list_head	list;
 	struct delayed_work	bark_work;
+	struct delayed_work     press_work;
+	struct work_struct  up_work;
+	atomic_t	   press_count;
 	struct dentry		*debugfs;
 	struct device_node      *pbs_dev_node;
 	int			pon_trigger_reason;
@@ -115,6 +118,8 @@ enum pon_restart_reason {
 	PON_RESTART_REASON_OEM_MIN		= 0x20,
 	PON_RESTART_REASON_OEM_MAX		= 0x3f,
 };
+
+
 
 /* Define OEM reboot mode magic*/
 #define AGING_MODE		0x77665510

@@ -4662,7 +4662,7 @@ static int fg_hw_init(struct fg_chip *chip)
 		return rc;
 	}
 
-	if (is_debug_batt_id(chip) || chip->dt.disable_esr_pull_dn) {
+	if (is_debug_batt_id(chip)) {
 		val = ESR_NO_PULL_DOWN;
 		rc = fg_masked_write(chip, BATT_INFO_ESR_PULL_DN_CFG(chip),
 			ESR_PULL_DOWN_MODE_MASK, val);
@@ -5681,17 +5681,6 @@ static void fg_cleanup(struct fg_chip *chip)
 {
 	int i;
 
-	power_supply_unreg_notifier(&chip->nb);
-	qpnp_misc_twm_notifier_unregister(&chip->twm_nb);
-	cancel_delayed_work_sync(&chip->ttf_work);
-	cancel_delayed_work_sync(&chip->sram_dump_work);
-	if (chip->dt.use_esr_sw)
-		alarm_cancel(&chip->esr_sw_timer);
-	cancel_work_sync(&chip->esr_sw_work);
-	cancel_delayed_work_sync(&chip->profile_load_work);
-	cancel_work_sync(&chip->status_change_work);
-	cancel_work_sync(&chip->esr_filter_work);
-	cancel_delayed_work_sync(&chip->pl_enable_work);
 	if (chip->fg_psy)
 		power_supply_unregister(chip->fg_psy);
 
